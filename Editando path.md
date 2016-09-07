@@ -1,15 +1,14 @@
-###Remover todo caminho (path) deixando apenas o nome do último arquivo
+###Remover todo caminho (path) deixando apenas o nome do arquivo
 
-####Comando para listar os arquivos dentro do diretório
-{r}
+````{r}
+# Comando para listar os arquivos dentro do diretório
     files <- list.files(pattern ="\\.shp$",full.names=TRUE,recursive=TRUE,include.dirs=TRUE)
 
-####Resultado
+# Resultado
+    "./Especies/Xolmis_dominicanus.shp" 
 
-    "./Xolmis dominicanus/Xolmis_dominicanus.shp" 
+# Comando para retirar o path
+      basename(files)
 
-####Comando para retirar o path
-    basename(files)
-
-####Resultado
+# Resultado
     "Xolmis_dominicanus.shp"
