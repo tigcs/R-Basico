@@ -1,4 +1,4 @@
-###Remover todo caminho (path) deixando apenas o nome do último arquivo
+###Remover todo caminho (path) deixando apenas o nome do arquivo
 
 ````{r}
 # Comando para listar os arquivos dentro do diretório
