@@ -5,7 +5,7 @@
     files <- list.files(pattern ="\\.shp$",full.names=TRUE,recursive=TRUE,include.dirs=TRUE)
 
 # Resultado
-    "./Xolmis dominicanus/Xolmis_dominicanus.shp" 
+    "./Especies/Xolmis_dominicanus.shp" 
 
 # Comando para retirar o path
       basename(files)
