@@ -44,7 +44,8 @@ writePolyShape(sp_biomas,"sp_biomas_test")
 ### >>> Cortar um raster <<<
 
 ````{r}
-#### Cortando variáveis pela extensão da América do Sul
+### Cortando variáveis pela extensão da América do Sul
+
 library(maptools)
 library(raster)
 library(dismo)
@@ -78,5 +79,90 @@ format="ascii",bylayer=TRUE,NAflag=-9999)
 
 ===
 
-### >>>
+### >>> Transferindo os shapes de espécies distribuídos em várias pasta  para uma única pasta <<<
+
+#### Esta operação também pode ser feita utilizando a função `file.copy`, que inclusive de ser mais rápida.
+
+````{r}
+library(rgdal)
+library(maptools)
+library(foreach)
+
+# Listando todos os arquivos shp dentro dos subdiretórios
+files<-list.files(pattern = "\\.shp$",full.names=TRUE,recursive=TRUE,include.dirs=TRUE)
+
+# Removendo o path dos elementos da lista
+file_path<-basename(files)
+
+# Substituindo a extensão "shp" do final dos elementos da lista
+files_shp<- gsub(pattern=".shp",replacement="",file_path)
+
+# Exportando cada shape para outra pasta.
+foreach(i=files, j=files_shp) %do% {
+shape<-readShapePoints(i)
+writeOGR(shape, "./_TODAS", j, driver="ESRI Shapefile")
+}
+````
+===
+
+### >>> Adicionando o nome da espécie na tabela de atributos de shp de polígonos <<<
+
+#### Comando `@data` é usado para acessar a tabela de atributos do shapefile
+````{r} 
+library(rgeos)
+library(rgdal)
+library(maptools)
+library(raster)
+# Cabeçalho e primeiras linhas da tabela de atributos do shapefile a1
+head(a1@data)
+                     nome_cient    bioma marinho fauna
+1 Aguarunichthys_tocantinsensis amazonia       0     1
+2            Aiouea_benthamiana amazonia       0     0
+3              Aiouea_lehmannii amazonia       0     0
+4          Albizia_glabripetala amazonia       0     0
+5             Alouatta_belzebul amazonia       0     1
+6             Alouatta_discolor amazonia       0     1
+
+# Adiciona uma nova coluna  e a preenche com o valor "a" em todas as linhas
+a1$nova_coluna <- "a"
+
+# Cabeçalho e primeiras linhas da tabela de atributos do shapefile a1 após adição de coluna
+head(a1@data)
+                     nome_cient    bioma marinho fauna nova_coluna
+1 Aguarunichthys_tocantinsensis amazonia       0     1           a
+2            Aiouea_benthamiana amazonia       0     0           a
+3              Aiouea_lehmannii amazonia       0     0           a
+4          Albizia_glabripetala amazonia       0     0           a
+5             Alouatta_belzebul amazonia       0     1           a
+6             Alouatta_discolor amazonia       0     1           a
+
+# Também é possível criar colunas com valores numéricos
+a1$nova_coluna <- 0
+
+# Cabeçalho e primeiras linhas da tabela de atributos do shapefile a1 após adição de coluna
+head(a1@data)
+                     nome_cient    bioma marinho fauna nova_coluna
+1 Aguarunichthys_tocantinsensis amazonia       0     1           0
+2            Aiouea_benthamiana amazonia       0     0           0
+3              Aiouea_lehmannii amazonia       0     0           0
+4          Albizia_glabripetala amazonia       0     0           0
+5             Alouatta_belzebul amazonia       0     1           0
+6             Alouatta_discolor amazonia       0     1           0
+
+# Remove coluna
+a1@data <- a1@data [,-5]
+head(a1@data)
+                     nome_cient    bioma marinho fauna
+1 Aguarunichthys_tocantinsensis amazonia       0     1
+2            Aiouea_benthamiana amazonia       0     0
+3              Aiouea_lehmannii amazonia       0     0
+4          Albizia_glabripetala amazonia       0     0
+5             Alouatta_belzebul amazonia       0     1
+6             Alouatta_discolor amazonia       0     1
+
+````
+
+===
+
+#### >>>
 
