@@ -54,7 +54,44 @@ nomes_<-gsub(pattern=" ",replacement="_",nomes)
 > nomes_
   [1] "Aburria_jacutinga"                               "Acrobatornis_fonsecai"                          
   [3] "Alectrurus_tricolor"
+````
+===
+
+### >>> Como converter vários XSLX em vários CSV usando FOREACH LOOP <<<
+
+#### Detalhes do uso do `foreach` em http://cran.r-project.org/web/packages/foreach/vignettes/foreach.pdf
+
 ````{r}
+library('XLConnect')
+library('foreach')
+
+# Cria uma lista com todos os arquivos em xlsx
+especies<-list.files(pattern = "\\.xlsx$")
+
+# Eliminar algum arquivo indesajado que esteja na pasta
+especies<-especies[-c(1:41)]
+
+## Cria um vetor que contenha os nomes desejados para serem os nomes dos arquivos finais.
+# Retira a extensão ".xlsx"
+nomes<-gsub(pattern=".xlsx",replacement="",especies)
+
+# Substitui todo espaço por "_"
+nomes_<-gsub(pattern=" ",replacement="_",nomes)
+
+# Retira todo "." Atenção se quiser substituir pontos ".", estes devem estar entre colchetes assim: "[.]"
+nomes_<-gsub(pattern="[.]",replacement="",nomes_) 
+
+# Cria um csv com a lista dos nomes dos arquivos.(Opcional)
+write.csv(nomes_,file="./csv/_lista_especies.csv", quote=FALSE)
+
+## Usando FOREACH LOOP para converter cada arquivo xlsx em um csv que terão como nome o elementos da 
+# lista criada acima.
+
+foreach(file = especies, j = nomes_) %do% {
+  xlsx_objeto<- readWorksheetFromFile(file=file, sheet=1, keep=c(2,3,4,6,7,8,9,10,13,18))
+  write.csv(xlsx_objeto,file=paste0("./csv/",j,".csv"))
+}
+````
 ===
 
 ### >>>
