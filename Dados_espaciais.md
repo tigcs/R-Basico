@@ -113,6 +113,7 @@ library(rgeos)
 library(rgdal)
 library(maptools)
 library(raster)
+
 # Cabeçalho e primeiras linhas da tabela de atributos do shapefile a1
 head(a1@data)
                      nome_cient    bioma marinho fauna
