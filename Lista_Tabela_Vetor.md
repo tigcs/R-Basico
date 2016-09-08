@@ -128,4 +128,59 @@ pe_ja <- data.frame(subset(cemave,sp=="pe_ja",select=-taxon),row.names = NULL)
 
 ===
 
+### >>> Join (merge) de tabelas pelos valores de colunas correspondentes <<<
+
+````{r}
+## Join entre tabela de registro de pontos e planilha mãe
+
+library(XLConnect)
+
+# Carregando tabela de registro de ocorrência
+registros<- readWorksheetFromFile(file="./registros_ocorrencia_refine.xlsx", sheet=1)
+
+# Carregando planilha mãe
+pl<-read.csv("planilha_mae_utf8.csv",header=TRUE,sep=";")
+
+# Join das tabelas pelo valor do campo "taxon". O campo taxon é em comum nas duas tabelas
+join<-merge(registros,pl,by.x="taxon",by.y="taxon",all.x=TRUE)
+````
+
+===
+
+### >>> Listar arquivos que tenham um string específica
+
+https://stackoverflow.com/questions/30156904/using-pattern-to-select-files-that-has-xx-at-any-part-the-name-in-r/30157003#30157003
+
+#### **Quetion**:
+#### I have a folder full of files which names are like these, for example:
+````{r}
+"./final_model_pre/pre_pe_ja_bc_wm.tif" 
+"./final_model_pre/pre_pe_ja_bc_wm.tif.aux.xml" 
+"./final_model_pre/pre_pe_ja_bc_wm.tif.ovr" 
+"./final_model_pre/pre_an_le_glm_wm.tif" 
+"./final_model_pre/pre_an_le_glm_wm.tif.aux.xml" 
+"./final_model_pre/pre_an_le_glm_wm.tif.ovr" 
+"./final_model_pre/pre_an_bo_ma_wm.tif" 
+"./final_model_pre/pre_an_bo_ma_wm.tif.aux.xml" 
+"./final_model_pre/pre_an_bo_ma_wm.tif.ovr" 
+"./final_model_pre/pre_pe_ja_mx_wm.tif" 
+"./final_model_pre/pre_pe_ja_mx_wm.tif.aux.xml"
+"./final_model_pre/pre_pe_ja_mx_wm.tif.ovr" 
+"./final_model_pre/pre_pe_ja_rf1_wm.tif"
+"./final_model_pre/pre_pe_ja_rf1_wm.tif.aux.xml"
+"./final_model_pre/pre_pe_ja_rf1_wm.tif.ovr" 
+"./final_model_pre/pre_pe_ja_svm_wm.tif"
+"./final_model_pre/pre_pe_ja_svm_wm.tif.aux.xml"
+"./final_model_pre/pre_pe_ja_svm_wm.tif.ovr"
+````
+#### I want to list every files that have "pe_ja" in the name and only with ".tif" extension, not ".tif.ovr" or ".tif.aux.xml" or any other extension. I'm trying to use list.files function, but I couldn't manage to use the pattern agrument properly. Could you help me doing that? 
+
+#### **Answer:**
+You can use a regular expression for that.
+`files = list.files(pattern = '.*pe_ja.*\\.tif$')`
+The `$` at the end of the regular expression indicates that that is the end of the string. The `\\.` is an escaped period, indicating that you want to match a period (not any character, which is what .normally matches).
+The `.*` selects any character any number of times (including 0).
+
+===
+
 ### >>>
