@@ -120,4 +120,12 @@ foreach(file = especies, j = nomes_) %do% {
 ````
 ===
 
+### >>> Evitar row.names após fazer o subset de um data.frame <<<
+````{r}
+# Usar a função data.frame junto com subset e colocar o argumento row.names = NULL
+pe_ja <- data.frame(subset(cemave,sp=="pe_ja",select=-taxon),row.names = NULL)
+````
+
+===
+
 ### >>>
