@@ -42,4 +42,30 @@ performance = "TSS", performance.value= 0.2, output.folder = "final_model",ponde
 
 ====
 
+### >>> Desligar o PC por dentro do R <<<
+
+#### Modos de shutdown:
+http://stackoverflow.com/questions/162304/how-do-i-shutdown-restart-logoff-windows-via-bat-file/162305#162305
+
+shutdown -r — restarts
+shutdown -s — shutsdown
+shutdown -l — logoff
+shutdown -t xx — where xx is number of seconds to wait till shutdown/restart/logoff
+shutdown -i — gives you a dialog box to fill in what function you want to use
+shutdown -a — aborts the previous shutdown command....very handy!
+Additional options:
+-f — force the selected action
+
+```{r}
+# Desliga o pc
+system('shutdown -r')
+````
+
+===
+
+### >>>
+
+
+
+
 
