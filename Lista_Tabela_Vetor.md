@@ -1,4 +1,31 @@
-### >>> Como juntar várias tabelas xlsx excel em um único data.frame <<<
+### >>> Juntar várias tabelas CSV em um único data.frame <<<
+
+````{r}
+
+# Lista todos os aqruivos .csv da pasta chamda csv
+tabelas_csv<- list.files(path="./csv",pattern ="\\.csv")
+
+# Eliminar um arquivo indesejado
+tabelas_csv<- tabelas_csv[-c(1,2,3)]
+
+#Ler a primeira tabela da lista
+sp1<- read.csv(file=paste0("./csv/",tabelas_csv[1]))
+
+# Foreach Loop com rbind adicionando uma tabela por vez ao sp1.
+foreach(i=tabelas_csv[-1]) %do% {
+  spi<- read.csv(file=paste0("./csv/",i))
+  sp1<- rbind(sp1,spi)
+}
+
+# Escreve a tabela final
+write.csv(sp1,file="./csv/_sp_TODAS.csv")
+````
+
+#### Detalhes do uso do `foreach` em http://cran.r-project.org/web/packages/foreach/vignettes/foreach.pdf
+
+===
+
+### >>> Juntar várias tabelas xlsx excel em um único data.frame <<<
 
 #### Retirado de:
 http://stackoverflow.com/questions/22394234/loop-for-read-and-merge-multiple-excel-sheets-in-r
@@ -59,7 +86,6 @@ nomes_<-gsub(pattern=" ",replacement="_",nomes)
 
 ### >>> Como converter vários XSLX em vários CSV usando FOREACH LOOP <<<
 
-#### Detalhes do uso do `foreach` em http://cran.r-project.org/web/packages/foreach/vignettes/foreach.pdf
 
 ````{r}
 library('XLConnect')
