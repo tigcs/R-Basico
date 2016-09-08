@@ -2,7 +2,7 @@
 
 #### Retirado de:
 http://stackoverflow.com/questions/22394234/loop-for-read-and-merge-multiple-excel-sheets-in-r
-^
+
 ````{r}
 # This will give you a vector of the names of files in your current directory 
 # (where I've assumed the directory contains only the files you want to read)
@@ -19,4 +19,14 @@ for (file in data.files[-1]) {
 ````
 ===
 
-### >>>
+### >>> Como remover elementos de uma lista <<<
+
+#### Retirado de:
+http://stackoverflow.com/questions/652136/how-can-i-remove-an-element-from-a-list
+
+````{r}
+x <- list("a", "b", "c", "d", "e"); # example list 
+x[-2]; # without 2nd element 
+x[-c(2, 3)]; # without 2nd and 3rd
+````
+===
