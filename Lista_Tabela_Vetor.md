@@ -46,7 +46,7 @@ for (file in data.files[-1]) {
 ````
 ===
 
-### >>> Como remover elementos de uma lista <<<
+### >>> Como remover elementos de uma lista ou vetor<<<
 
 #### Retirado de:
 http://stackoverflow.com/questions/652136/how-can-i-remove-an-element-from-a-list
@@ -58,7 +58,7 @@ x[-c(2, 3)]; # without 2nd and 3rd
 ````
 ===
 
-### >>> Como remover ou substituir caracteres dos elementos de uma lista <<<
+### >>> Como remover ou substituir caracteres dos elementos de uma lista ou vetor<<<
 
 #### Retirado de:
 http://stackoverflow.com/questions/19667234/removing-a-group-of-words-from-a-character-vector
