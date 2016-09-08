@@ -151,8 +151,8 @@ join<-merge(registros,pl,by.x="taxon",by.y="taxon",all.x=TRUE)
 
 https://stackoverflow.com/questions/30156904/using-pattern-to-select-files-that-has-xx-at-any-part-the-name-in-r/30157003#30157003
 
-#### **Quetion**:
-#### I have a folder full of files which names are like these, for example:
+#### **Quetion:**
+I have a folder full of files which names are like these, for example:
 ````{r}
 "./final_model_pre/pre_pe_ja_bc_wm.tif" 
 "./final_model_pre/pre_pe_ja_bc_wm.tif.aux.xml" 
@@ -173,7 +173,7 @@ https://stackoverflow.com/questions/30156904/using-pattern-to-select-files-that-
 "./final_model_pre/pre_pe_ja_svm_wm.tif.aux.xml"
 "./final_model_pre/pre_pe_ja_svm_wm.tif.ovr"
 ````
-#### I want to list every files that have "pe_ja" in the name and only with ".tif" extension, not ".tif.ovr" or ".tif.aux.xml" or any other extension. I'm trying to use list.files function, but I couldn't manage to use the pattern agrument properly. Could you help me doing that? 
+I want to list every files that have "pe_ja" in the name and only with ".tif" extension, not ".tif.ovr" or ".tif.aux.xml" or any other extension. I'm trying to use list.files function, but I couldn't manage to use the pattern agrument properly. Could you help me doing that? 
 
 #### **Answer:**
 You can use a regular expression for that.
