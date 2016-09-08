@@ -37,6 +37,19 @@ file.append(file1, file2)
 file.copy(from, to, overwrite = recursive, recursive = FALSE, copy.mode = TRUE)
 file.symlink(from, to)
 file.link(from, to)
+
+# lista os arquivos
+arquivos <- list.files(path="sp_separadas2", full.names = T)
+
+# Loop renomeia os arquivos
+for (a in arquivos) {
+  
+  a_base <- basename(a)
+  
+  a_base_SEM <- gsub(pattern = "todas_nome3__",replacement = "",a_base)
+  
+  file.copy(from = a, to = paste0("renomeados/",a_base_SEM), recursive = FALSE, copy.mode = TRUE)
+  }
 ````
 
 ===
