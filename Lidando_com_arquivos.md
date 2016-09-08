@@ -1,4 +1,4 @@
-### Remover todo caminho (path) deixando apenas o nome do arquivo
+### > Remover todo caminho (path) deixando apenas o nome do arquivo
 
 ````{r}
 # Comando para listar os arquivos dentro do diretório
@@ -16,7 +16,7 @@
 
 =
 
-### Seleciona apenas arquivos que tenham exatamente a extensão “.tif”
+### > Seleciona apenas arquivos que tenham exatamente a extensão “.tif”
 #### Se colocar apenas `pattern = ".tif"` selecionará também outros arquivos tipo “.tif.aux” ou “.tif.xml” etc.
 ````{r}
 # Comando para listar APENAS os arquivos que contenham ".tif"
