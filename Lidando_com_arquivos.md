@@ -14,7 +14,7 @@
     "Xolmis_dominicanus.shp"
 ````
 
-=
+===
 
 ### >>> Seleciona apenas arquivos que tenham exatamente a extensão “.tif” <<<
 #### Se colocar apenas `pattern = ".tif"` selecionará também outros arquivos tipo “.tif.aux” ou “.tif.xml” etc.
@@ -22,4 +22,25 @@
 # Comando para listar APENAS os arquivos que contenham ".tif"
     files <- list.files(pattern = "\\.tif$")
 ````
+
+===
+
+### >>> Remover, deletar, apagar, copiar, renomear arquivos usando R <<<
+
+````{r}
+
+file.create(..., showWarnings = TRUE)
+file.exists(...)
+file.remove(...)
+file.rename(from, to)
+file.append(file1, file2)
+file.copy(from, to, overwrite = recursive, recursive = FALSE, copy.mode = TRUE)
+file.symlink(from, to)
+file.link(from, to)
+````
+
+===
+
+
+
 
