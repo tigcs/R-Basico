@@ -30,3 +30,31 @@ x[-2]; # without 2nd element
 x[-c(2, 3)]; # without 2nd and 3rd
 ````
 ===
+
+### >>> Como remover ou substituir caracteres dos elementos de uma lista <<<
+
+#### Retirado de:
+http://stackoverflow.com/questions/19667234/removing-a-group-of-words-from-a-character-vector
+
+````{r}
+# Sua lista especies
+> especies
+  [1] "Aburria jacutinga.xlsx"                              
+  [2] "Acrobatornis fonsecai.xlsx"                          
+  [3] "Alectrurus tricolor.xlsx" 
+
+# Retirar a extensão “.xlsx”
+nomes<-gsub(pattern=".xlsx",replacement="",especies)
+> nomes
+  [1] "Aburria jacutinga"                               "Acrobatornis fonsecai"                          
+  [3] "Alectrurus tricolor"        
+
+# Substituir os espaços por “_”
+nomes_<-gsub(pattern=" ",replacement="_",nomes)
+> nomes_
+  [1] "Aburria_jacutinga"                               "Acrobatornis_fonsecai"                          
+  [3] "Alectrurus_tricolor"
+````{r}
+===
+
+### >>>
