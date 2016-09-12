@@ -58,7 +58,7 @@ Additional options:
 
 ```{r}
 # Desliga o pc
-system('shutdown -r')
+system('shutdown -s')
 ````
 
 ===
