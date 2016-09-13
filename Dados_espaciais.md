@@ -161,6 +161,16 @@ head(a1@data)
 5             Alouatta_belzebul amazonia       0     1
 6             Alouatta_discolor amazonia       0     1
 
+# Remove coluna (outra opacao)
+a1 <- a1[,-5]
+head(a1@data)
+                     nome_cient    bioma marinho fauna
+1 Aguarunichthys_tocantinsensis amazonia       0     1
+2            Aiouea_benthamiana amazonia       0     0
+3              Aiouea_lehmannii amazonia       0     0
+4          Albizia_glabripetala amazonia       0     0
+5             Alouatta_belzebul amazonia       0     1
+6             Alouatta_discolor amazonia       0     1
 ````
 
 ===
