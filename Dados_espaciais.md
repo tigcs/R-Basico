@@ -175,5 +175,128 @@ head(a1@data)
 
 ===
 
-#### >>>
+#### >>> RASTERIZAR POLIGONOS (TIPO SPATIAL JOIN) <<<
+
+#### Ao usar a função `rasterize` dirtamente em um polígono, caso ele seja muito menor que a célula, pode ocorrer de ser gerado um raster vazio. Um forma de contornar este problema é "converter" o polígono para polígonos de tamanho equivalente ao da célula. Algo semelhante ao um "spatial join" ou "select by location".
+````{r}
+library(rgeos)
+library(rgdal)
+library(maptools)
+library(raster)
+library(snowfall)
+
+# Lista arquivos das especies
+sp_files <- list.files(path="./1_split_sp_nome", pattern="\\.shp$",full.names=TRUE)
+
+# Carrega o fishnet
+fishnet <- readShapePoly("./1_fishnet/_BIOMAS.shp",proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+# Carrega o raster modelo
+raster_modelo <- raster("raster_modelo/fishnet_brasilzee_1.tif")
+
+# Carrega o limite o fishnet
+limite_fish <- readShapePoly ("./1_fishnet/fish_barsilzee_disol.shp",proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+# Adiciona a coluna pixel preenchendo com 0
+limite_fish$pixel <- 0 
+
+
+## Funcao Rasterizar
+rasterizar_pol <- function( sp,
+                            fishnet,
+                            limite_fish,
+                            raster_modelo)  {
+  
+  
+  # Carrega o shapefile da especie
+  sp_shp <- readShapePoly(sp,proj4string=CRS("+proj=longlat +datum=WGS84"))
+  
+  # Adiciona coluna pixel no shape especie
+  sp_shp@data$pixel <- 1
+  
+  # Nome especie formatado
+  nome_sp <- gsub(sp_shp$nome_cient,pattern = " ", replacement = "_" )
+  nome_sp <- gsub(nome_sp,pattern = "-", replacement = "_" )
+  nome_sp <- gsub(nome_sp,pattern = '[(]', replacement = "" )
+  nome_sp <- gsub(nome_sp,pattern = ")", replacement = "" )
+  nome_sp <- gsub(nome_sp,pattern = '[.]', replacement = "" )
+  nome_sp <- gsub(nome_sp,pattern = "subsp._", replacement = "" )
+  nome_sp <- gsub(nome_sp,pattern = "var._", replacement = "" )
+  
+  cat("Shapefile de ", nome_sp, "carregado." ,"\n")
+  
+  # Identifica as celulas que tem sobreposicao
+  col_nome_cient <- over(y=sp_shp, x=fishnet)
+  
+  cat("Sobreposicao com fishnet feita." ,"\n")
+  
+  # Leva para o fishnet a coluna com as celula com sobreposicao indicadas
+  fishnet@data <- cbind(fishnet@data,col_nome_cient)
+  
+  cat("Adicao da coluna de sobreposicao ao fishnet feita." ,"\n")
+  
+  # Subset do fishnet retirando apenas aquelas celulas que tem sobreposicao com a especie.
+  fishnet_sp <- subset (fishnet, pixel==1 )
+  
+  cat("Subset do fishnet feito." ,"\n")
+  
+  # Remove outras colunas deixando apenas a coluna pixel
+  fishnet_sp <- fishnet_sp[,4]
+  
+  # Merge com o limite do fishnet dissolvido
+  merge <- rbind.SpatialPolygonsDataFrame(fishnet_sp,limite_fish, makeUniqueIDs = TRUE)
+  
+  cat("Merge do fishnet com o limite dissolvido feito." ,"\n")
+  
+  # substituir os NA da coluna pixel por 0
+  #fishnet1@data$pixel[is.na(fishnet1@data$pixel)] <- 0
+    
+  # Faz dissolve pelo campo pixel
+  #disol <- gUnaryUnion(merge, id = merge@data$pixel)
+  disol <-  aggregate(merge, by = list(merge@data$pixel), dissolve = TRUE, FUN= mean) 
+  
+  # Transforma o poligono em raster
+  r <- rasterize(disol,raster_modelo,field="pixel",NAflag=-9999)
+  
+  cat("Shapefile rasterizado." ,"\n")
+
+  # Escreve o raster
+  writeRaster(x= r, filename = paste0("./3_raster_R/",nome_sp),format="GTiff", overwrite=TRUE, NAflag=-9999)
+  
+  cat("Raster salvo." ,"\n")
+  
+  # Remove a coluna nome_cient e pixel do fishnet retornando para condicao inicial
+  fishnet <- fishnet[,-c(4,3)]
+  
+  cat("Fishnet retorna ao estado original." ,"\n")
+  
+  cat("###############################################################" ,"\n")
+  
+} # Fecha a funcao
+
+rasterizar_pol(sp= sp_files, fishnet=fishnet, limite_fish = limite_fish, raster_modelo= raster_modelo)
+
+#################### Processamento em paralelo ####################
+
+# Inicia o processamento em paralelo
+sfInit(parallel=T,cpus=2)
+
+# Carrega os pacotes nos cluster(nucleos)
+sfLibrary(raster)  
+sfLibrary(maptools) 
+sfLibrary(rgeos)  
+sfLibrary(rgdal)
+
+# Roda a funcao em paralelo
+sfClusterApplyLB(sp_files,rasterizar_pol, fishnet=fishnet, limite_fish = limite_fish, raster_modelo= raster_modelo)
+
+# Para o processamento em paralelo
+sfStop()
+
+# Desligar o PC
+system('shutdown -s')
+````
+
+### >>>
+
 
