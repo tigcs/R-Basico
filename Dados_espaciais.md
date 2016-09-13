@@ -172,7 +172,83 @@ head(a1@data)
 5             Alouatta_belzebul amazonia       0     1
 6             Alouatta_discolor amazonia       0     1
 ````
+===
 
+### >>> Merge de shapefile de especies <<<
+
+#### Merge só funciona se os shapefiles tiverem as mesmas colunas, para isso pode se deletar ou criar colunas para que haja correspondência.
+
+````{r}
+library(rgeos)
+library(rgdal)
+library(maptools)
+library(raster)
+
+# Lista arquivos das especies
+sp_files <- list.files(path="./7_intersect_biomas_arc_copia", pattern="\\.shp$",full.names=TRUE)
+
+# Carrega o primeiro shapefile
+sp_shp <- readShapePoly(sp_files[1],proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+# Formata o nome especie retirando caracteres indesejaveis
+nome_sp <- gsub(sp_shp$nome_cient,pattern = " ", replacement = "_" )
+nome_sp <- gsub(nome_sp,pattern = "-", replacement = "_" )
+nome_sp <- gsub(nome_sp,pattern = '[(]', replacement = "" )
+nome_sp <- gsub(nome_sp,pattern = ")", replacement = "" )
+sp_shp@data$nome_cient <- nome_sp
+
+# Remove colunas nao coincicentes entre os shapefiles
+sp_shp@data <- sp_shp@data[,c(2,4)]
+
+# Retira o primeiro shapefile da lista 
+sp_files <- sp_files[-1]
+
+for (shp in sp_files){
+
+    # Carrega o shapefile da especie
+    sp_shp_2 <- readShapePoly(shp,proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+    # Formata o nome especie retirando caracteres indesejaveis
+    nome_sp_2 <- gsub(sp_shp_2$nome_cient,pattern = " ", replacement = "_" )
+    nome_sp_2 <- gsub(nome_sp_2,pattern = "-", replacement = "_" )
+    nome_sp_2 <- gsub(nome_sp_2,pattern = '[(]', replacement = "" )
+    nome_sp_2 <- gsub(nome_sp_2,pattern = ")", replacement = "" )
+    sp_shp_2@data$nome_cient <- nome_sp_2
+
+    # Remove colunas nao coincicentes entre os shapefiles
+    sp_shp_2@data <- sp_shp_2@data[,c(2,4)]
+    cat(shp,"\n")
+
+    # Merge do shapefile
+    sp_shp <- rbind.SpatialPolygonsDataFrame(sp_shp,sp_shp_2, makeUniqueIDs = TRUE)
+    cat(shp,"merged","\n")
+}
+````
+
+===
+
+### >>> Dissolve por mais de um campo <<<
+
+#### Se usar a função `gUnaryUnion` mesmo indicando mais de um campo no atributo `id`, será feito um dissolve tudo.
+#### Para fazer um `dissolve` por mais de um campo use a função `aggregate`.
+
+````{r}
+library(rgeos)
+library(rgdal)
+library(maptools)
+library(raster)
+
+# Carregar shapefile 
+sp_biomas <- readShapePoly(fn= "./sp_biomasEdit.shp",proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+# Faz o dissolve
+a = aggregate(sp_biomas, by = list(sp_biomas@data$nome_cient,sp_biomas@data$bioma,sp_biomas@data$marinho),
+dissolve = TRUE, FUN= mean) 
+# disol <- gUnaryUnion(sp_biomas, id = c(sp_biomas@data$nome_cient,sp_biomas@data$bioma,sp_biomas@data$marinho))
+ 
+# Escreve o shapefile
+shapefile(x= a, filename=("sp_biomas_disol_R.shp"))
+````
 ===
 
 #### >>> RASTERIZAR POLIGONOS (TIPO SPATIAL JOIN) <<<
