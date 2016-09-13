@@ -25,6 +25,34 @@ write.csv(sp1,file="./csv/_sp_TODAS.csv")
 
 ===
 
+### >>> Criar uma tabela vazia e adicionar linhas subsequentes <<<
+
+````{r}
+# Cria uma tabela com três colunas, a primeira de caracteres, e outras duas de números.
+tabela <- data.frame(character(0),numeric(0),numeric(0))
+
+# Nomeia as colunas das tabela vazia
+names(tabela) <- c("tx", "minValue","maxValue")
+
+for (rst in raster_files) {
+  
+  # Carrega o raster da especie
+  r <- raster(rst)
+  
+  # Formata o nome da especie
+  nome_sp <- basename(rst)
+  nome_sp <- gsub(nome_sp, pattern = "\\.tif$",replacement = "")
+  
+  # Cria uma tabela com o nome da especie, minimo valor e maximo valor do raster
+  tabela_r <- data.frame(tx= nome_sp, minValue= minValue(r), maxValue= maxValue(r))
+  
+  # Adiciona a tabela vazia a tabela criada na linha anterior
+  tabela <- rbind(tabela,tabela_r)
+  
+  cat(nome_sp,"\n")
+} 
+````
+
 ### >>> Juntar várias tabelas xlsx excel em um único data.frame <<<
 
 #### Retirado de:
