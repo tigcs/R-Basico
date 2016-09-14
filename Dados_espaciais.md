@@ -250,8 +250,48 @@ dissolve = TRUE, FUN= mean)
 shapefile(x= a, filename=("sp_biomas_disol_R.shp"))
 ````
 ===
+### >>> Gerando raster <<<
 
-#### >>> RASTERIZAR POLIGONOS (TIPO SPATIAL JOIN) <<<
+####  ATENÇÃO: ao usar `rasterize` se a área do polígono for muito pequena ele será ignorado. É melhor transferir o valor do pixel para um grid de pontos e criar o raster a partir deste grid, ou realizar um operação do tipo "spatial join" com um fishnet e criar um raster a partir do fishnet. 
+
+````{r} 
+library(raster)
+
+# Carrega a tabela que contem todos os valores das proporcoes
+emp_planejado <- read.table("./planejado/7_wgs/emp_planejado.txt",sep=",",header = T)
+
+#Carrega o shapefile de ptos
+ptos<-shapefile("./_GRID/grid_caatinga_ptos.shp")
+
+# Carrega o raster do bioma
+r_bioma<- raster("./_GRID/grid_caatinga_disol_64bit.tif")
+
+# Lista tipologias
+tipologia<-unique(emp_planejado$tipologia)
+
+for (tp in tipologia){
+    
+# Selecionado shape com base nos atributos (select by attributes)
+tipo<- emp_planejado[emp_planejado$tipologia==tp,]
+
+# Merge: equivale a um join de tabelas
+join <- merge(ptos,tipo,by="Id",all.x=F)
+
+# Rasterizar: transforma o poligono do empreendimento em raster
+r_pol <- rasterize(join,r_bioma,field="propEmp",background=NA,mask=F)
+
+# Merge com o raster do bioma, para que os valores NA no r_pol sejam transformados em 0.
+raster_merge <- merge(r_pol,r_bioma)
+
+# Escreve o raster
+writeRaster(raster_merge,filename= paste0("./planejado/8_raster/",tp,"_planejado"),format="GTiff",NAflag=-9999,overwrite=TRUE)  
+
+rm(join)
+}
+````
+===
+
+### >>> RASTERIZAR POLIGONOS (TIPO SPATIAL JOIN) <<<
 
 #### Ao usar a função `rasterize` dirtamente em um polígono, caso ele seja muito menor que a célula, pode ocorrer de ser gerado um raster vazio. Um forma de contornar este problema é "converter" o polígono para polígonos de tamanho equivalente ao da célula. Algo semelhante ao um "spatial join" ou "select by location".
 ````{r}
