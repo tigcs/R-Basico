@@ -24,3 +24,11 @@ plot(tx_shp,col=rgb(205/255,0/255,0/255,alpha=0.5), border="red4",lwd=3,add=T)
 ````{r}
 title(main= substitute(expr=italic (nome_sp),env = list(nome_sp=nome_sp)), cex.main = 2, outer=TRUE)
 ````
+===
+### >>> R Markdown Word <<<
+
+#### Salva o resultado no script em um documento word.
+
+http://rmarkdown.rstudio.com/word_document_format.html
+===
+
