@@ -413,6 +413,30 @@ sfStop()
 system('shutdown -s')
 ````
 
-### >>>
+### >>> Reparando geometria udando `repeat` e `break` <<<
 
+#### Alguns problemas de geometria podem ser corrigidos fazendo um buffer de largura 0. Assim será criado um shapefile com limite igual ao original, mas com a geometria correta.
+````{r}
+
+library(raster)
+library(maptools)
+library (rgeos)
+
+# Ler o shapefile do limite da borda da America do Sul
+limite_shp_borda  <- readShapePoly ("0_limites/am_sul_borda.shp",proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+# Loop repetido para corrigir geometrias
+ repeat {
+       
+   # Checa se a geometria do shapefile tem algum problema # Havendo problema corrige.
+   if (gIsValid(limite_shp_borda) == FALSE){
+       limite_shp_borda <-gBuffer(limite_shp_borda, byid=TRUE,width=0.0)}
+   
+   if (gIsValid(limite_shp_borda) == TRUE) {
+       print("geometria corrigida")
+   break} # Sai do loop
+   
+} # fecha o repeat
+````
+===
 
