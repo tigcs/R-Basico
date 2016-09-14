@@ -85,7 +85,36 @@ x[-2]; # without 2nd element
 x[-c(2, 3)]; # without 2nd and 3rd
 ````
 ===
+### >>> Como selecionar itens de uma lista com um padrão (pattern) <<<
 
+````{r}
+# Lista 
+   final_models_path_CAN <- list.files(path = "./2_final_model/CAN",pattern="\\.tif$",full.names = T)
+   final_models_path_HAD <- list.files(path = "./2_final_model/HAD",pattern="\\.tif$",full.names = T)
+   final_models_path <-c(final_models_path_CAN, final_models_path_HAD)
+
+# Seleciona itens da lista que tem como padrão o “sp” usando a função grep, que dará as posições que 
+se encontram os elementos que tenham o padrão “sp”.
+    final_models_path[grep(pattern=sp, final_models_path)]
+````
+===
+
+### >>> Busca dentro de uma lista (fichas) o termo (sp), e retorna o elemento da lista que contém o termo <<<
+````{r}
+grep(sp,fichas,value=T)
+````
+===
+
+### >>> Seleciona a string que está entre dois caracteres, no caso duas barras "/", dentro do elemento “ficha_ori” <<<
+````{r}
+> ficha_ori
+[1] "./_fichas/Fringilidae/Sporagra yarrellii.doc"
+familia <- sub(".*/(.*)/.*","\\1",ficha_ori)
+familia
+> Fringilidae
+````
+
+===
 ### >>> Como remover ou substituir caracteres dos elementos de uma lista ou vetor<<<
 
 #### Retirado de:
