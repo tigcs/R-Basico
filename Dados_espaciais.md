@@ -231,6 +231,7 @@ for (shp in sp_files){
 
 #### Se usar a função `gUnaryUnion` mesmo indicando mais de um campo no atributo `id`, será feito um dissolve tudo.
 #### Para fazer um `dissolve` por mais de um campo use a função `aggregate`.
+#### ATENÇÃO: Valores `NA` ocosionam erro no `aggregate`
 
 ````{r}
 library(rgeos)
