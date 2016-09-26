@@ -1,3 +1,7 @@
+### Funcao para desenhar a seta do Norte no plot ###
+
+#### Produzido por terceiros, retirado de uma pergunta do Stack Over Flow.
+
 northarrow <- function(loc,size,bearing=0,cols,cex=1,...) {
   # checking arguments
   if(missing(loc)) stop("loc is missing")
