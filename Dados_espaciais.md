@@ -414,7 +414,7 @@ sfStop()
 system('shutdown -s')
 ````
 
-### >>> Reparando geometria udando `repeat` e `break` <<<
+### >>> Reparando geometria usando `repeat` e `break` <<<
 
 #### Alguns problemas de geometria podem ser corrigidos fazendo um buffer de largura 0. Assim será criado um shapefile com limite igual ao original, mas com a geometria correta.
 ````{r}
@@ -440,4 +440,16 @@ limite_shp_borda  <- readShapePoly ("0_limites/am_sul_borda.shp",proj4string=CRS
 } # fecha o repeat
 ````
 ===
+
+### >>> “Clip” Intersection entre dois shapefile de polígonos <<<
+
+https://cran.r-project.org/web/packages/rgeos/rgeos.pdf
+````{r}
+library(rgeos)
+# intereseção entre sp_pol e bioma
+intersection <- gIntersection(sp_pol,bioma)
+````
+
+===
+
 
