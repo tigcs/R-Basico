@@ -449,7 +449,6 @@ library(rgeos)
 # intereseção entre sp_pol e bioma
 intersection <- gIntersection(sp_pol,bioma)
 ````
-
 ===
 
 
