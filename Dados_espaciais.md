@@ -76,7 +76,49 @@ masked <- mask(cortado,mask=am_sul)
 writeRaster(cortado,filename= paste0("./AM_SUL/hadgem2_es/2080/rcp85/",names(cortado)),
 format="ascii",bylayer=TRUE,NAflag=-9999)
 ````
+===
 
+### >>> Cortar variaveis para uma mesma extensao <<<
+````{r}
+setwd("D:/2016/vulnerabilidade_uc/todas_var")
+
+library(raster)
+
+# Lista os arquivos das variaveis
+ var_files <- list.files(path="./0_fonte/", pattern = "\\.tif$",full.names = TRUE,include.dirs = FALSE)
+
+# carrega o raster modelo 
+ raster_mod <- raster("./0_limite/fishnet_brasilzee.tif")
+ 
+ 
+for (v in var_files) {
+  
+  # Carrega o raster
+  var <- raster(v)
+  cat(basename(v)," carregado","\n")
+  
+  # Crop pela extensao
+  var_crop <- crop(x= var, y= raster_mod)
+  cat(basename(v)," cropped","\n")
+  
+  # Corrige a extensao caso o crop tenha um extensao reduzida
+  var_crop <- extend(var_crop,raster_mod)
+  
+  # Mask pela limite do raster
+  var_mask <- mask(x= var_crop, mask= raster_mod)
+  cat(basename(v)," masked","\n")
+  
+  # Separa o nome da camada
+  nome <- basename(v)
+  nome <- gsub(nome, pattern = ".tif", replacement = "")
+  
+  # Escreve o raster
+  writeRaster(x=var_mask, filename=paste0("./1_cortadas/",nome), NAflag = -9999, format="GTiff", overwrite=TRUE)
+  cat(basename(v)," escrito","\n")
+  cat("######################################################","\n")
+  
+  }# Fecha o loop
+````
 ===
 
 ### >>> Transferindo os shapes de espécies distribuídos em várias pasta  para uma única pasta <<<
@@ -292,7 +334,7 @@ rm(join)
 ````
 ===
 
-### >>> RASTERIZAR POLIGONOS (TIPO SPATIAL JOIN) <<<
+### >>> Rasterizar polígonos (Tipo Spatial Join) <<<
 
 #### Ao usar a função `rasterize` dirtamente em um polígono, caso ele seja muito menor que a célula, pode ocorrer de ser gerado um raster vazio. Um forma de contornar este problema é "converter" o polígono para polígonos de tamanho equivalente ao da célula. Algo semelhante ao um "spatial join" ou "select by location".
 ````{r}
@@ -494,4 +536,85 @@ r <- raster("dist_lenco1.tif")
 r_01 <- (r - minValue(r)) / (maxValue(r) - minValue(r))
 ````
 ===
+### >>> Intersect e Dissolve de especies em UCs <<<
+````{r}
+setwd("D:/2016/vulnerabilidade_uc/especies_poligonos")
 
+library(rgeos)
+library(rgdal)
+library(maptools)
+library(raster)
+
+# Carregar shapefile de ucs
+ucs <- readShapePoly(fn= "./1_merge/ucs.shp",proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+# Lista arquivos das especies
+sp_files <- list.files(path="./6_split_sp", pattern="\\.shp$",full.names=TRUE)
+
+# Cria uma tabela para receber a lista da especie sem intersecao com ucs
+sp_sem_inter <- data.frame(row.names=NULL)
+
+
+for (shp in sp_files) {
+  
+# Carrega o shapefile da especie
+sp_shp <- readShapePoly(shp,proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+# Nome especie
+nome_sp <- gsub(sp_shp$nome_cient,pattern = " ", replacement = "_" )
+
+cat("shapefile de ", nome_sp,"carregado", "\n")
+
+# Especies com intersecao
+if (gIntersects(sp_shp,ucs) == TRUE) {
+  
+  
+ # Checa a geometria e rapara
+  if (gIsValid(sp_shp) == FALSE){
+    sp_shp <- gBuffer(sp_shp,width=0.0)
+    }else{cat("Geometria OK","\n")}
+
+# Faz o intersect entre UCs e shape especies
+inter <- intersect(sp_shp,ucs)
+
+cat("shapefile de ", nome_sp,": intersect feito", "\n")
+
+# Faz o dissolve
+disol <- gUnaryUnion(inter, id = inter@data$nome_cient)
+disol$nome_cient <- nome_sp
+
+cat("shapefile de ", nome_sp,": dissolve feito", "\n")
+
+# Escreve o shapefile
+shapefile(x= disol, filename=paste0("./7_R_inter/",nome_sp,".shp"))
+
+cat("shapefile de ", nome_sp,": salvo", "\n")
+
+} # Fecha condicao
+
+
+# Especies sem intersecao
+if (gIntersects(sp_shp,ucs) == FALSE) {
+  
+  cat("shapefile de ", nome_sp,": SEM interseção", "\n")
+  
+  # Adicina o nome da sp sem intersecao
+  sp_sem_inter <- rbind(sp_sem_inter,nome_sp)
+  
+}# Fecha condicao
+ cat ("#######################################################################", "\n")  
+
+} # Fecha o for loop
+
+
+
+# Troca o nome da coluna
+names(sp_sem_inter) <- "taxon"
+
+# Escreve a tabela de especies sem intersecao
+write.table(x= sp_sem_inter, file = "./7_R_inter/_SP_SEM_INTER.txt",quote = FALSE,row.names = FALSE)
+
+# Desliga o PC
+system('shutdown -s')
+===
+````
