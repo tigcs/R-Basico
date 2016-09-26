@@ -450,5 +450,33 @@ library(rgeos)
 intersection <- gIntersection(sp_pol,bioma)
 ````
 ===
+### >>> Split layer by attributes <<<
 
+#### Separa as feições de um shapefile de acordo com uma coluna de atributos.
+
+````{r}
+
+library(raster)
+library(maptools)
+
+# Carrega nome do arquivo
+arquivo <- list.files( path = ".", pattern = "\\.shp$",full.names = T)
+
+# Carrega o shapefile
+shp <- shapefile(arquivo)
+
+# Lista as especies
+taxons <- unique(shp$taxon)
+
+# Split layer by attributes
+for (t in taxons) {
+  
+ sp1<-subset(shp,shp$taxon==t)
+
+ t <- gsub(pattern = " ",replacement = "_",t)
+ 
+ writeSpatialShape(x=sp1,fn=paste0("./split/",t))
+}
+````
+===
 
