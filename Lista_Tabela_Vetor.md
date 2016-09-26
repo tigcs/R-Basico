@@ -248,3 +248,33 @@ simpleCap <- function(x) {
   paste(toupper(substring(s, 1, 1)), substring(s, 2),
         sep = "", collapse = " ") }
 ````
+===
+### >>> Sumarize, Count ou Frequência <<<
+
+#### Calcular a frequência que um elemento aparece em um vetor
+#### Função `table` associada à função `as.data.frame`:
+````{r}
+a <- c(1,1,1,1,2,2,2,3,3,4,4,4,4,4,4,4)
+table(a)
+a
+1 2 3 4 
+4 3 2 7 
+ as.data.frame(table(a))
+  a Freq
+1 1    4
+2 2    3
+3 3    2
+4 4    7
+````
+#### Ou usar a função `count`do pacote `plyr`:
+````{r}
+library(plyr)
+
+> count(tab_num,vars ="ID_CEL")
+
+  ID_CEL freq
+1      1    4
+2      2    4
+3      3    4
+````
+===
