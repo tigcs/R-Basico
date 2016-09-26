@@ -1,6 +1,6 @@
 ### >>> Decisao de qual UC sera representada pela celula <<<
 
-#### Uma forma de decidir qual será a uc representada pela célula do grid, quando mais de uma UCs está presente na mesma célula.
+#### Uma forma de decidir qual será a UC representada pela célula do grid, quando mais de uma UC está presente na mesma célula.
 #### Os critérios de decisão foram escolhidos em reuniões com outras coordenações.
 
 ````{r}
