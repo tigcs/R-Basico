@@ -479,4 +479,19 @@ for (t in taxons) {
 }
 ````
 ===
+### >>> Normaliza valores de um raster <<<
+
+````{r}
+setwd("I:/Gp-A-COAPRO-bsa/projetos/vulnerabilidade_uc/Rodrigo")
+
+library(raster)
+
+# Carregar o raster
+
+r <- raster("dist_lenco1.tif")
+
+# Normaliza o raster para vairar de 0 a 1
+r_01 <- (r - minValue(r)) / (maxValue(r) - minValue(r))
+````
+===
 
