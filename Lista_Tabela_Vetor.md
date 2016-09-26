@@ -313,3 +313,9 @@ names(tab_raster) <- c("taxon","raster")
 tab_sem_raster <- subset.data.frame(tab_raster,raster==FALSE)
 ````
 ===
+### >>> Remover linhas duplicadas baseando-se em um única coluna <<<
+````{r}
+# Remove as linhas duplicadas baseando-se na 1ª coluna de tab_ucs
+tab_ucs <- tab_ucs[!duplicated(tab_ucs[,1]),]
+````
+===
