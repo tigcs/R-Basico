@@ -319,3 +319,14 @@ tab_sem_raster <- subset.data.frame(tab_raster,raster==FALSE)
 tab_ucs <- tab_ucs[!duplicated(tab_ucs[,1]),]
 ````
 ===
+### >>> Como remover parênteses ( ) de uma string <<<
+#### A princípio usando o caractere especial dentro de colchetes [ ] funciona com qualquer caractere.
+
+````{r}
+# Nome especie
+nome_sp <- gsub(sp_shp$nome_cient,pattern = " ", replacement = "_" )
+nome_sp <- gsub(nome_sp,pattern = "-", replacement = "_" )
+nome_sp <- gsub(nome_sp,pattern = '[(]', replacement = "" )
+nome_sp <- gsub(nome_sp,pattern = ")", replacement = "" )
+````
+
