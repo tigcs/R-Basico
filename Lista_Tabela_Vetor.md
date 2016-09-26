@@ -278,3 +278,38 @@ library(plyr)
 3      3    4
 ````
 ===
+### >>> Confere se elementos de um conujnto estão contidos em um outro <<<
+
+````{r}
+setwd("D:/2016/vulnerabilidade_uc/_R1")
+
+# Lista de arquivos iniciais
+especies <- list.files("./novos3",pattern="\\.shp$", full.names = TRUE)
+especies <- basename(especies)
+especies <- gsub(especies, pattern = "\\.shp$", replacement = "")
+
+
+# Lista de arquivos finais
+rasters <- list.files("./raster",pattern = "\\.tif$")
+rasters <- basename(rasters)
+rasters <- gsub(rasters,pattern = "\\.tif$",replacement = "")
+
+# Cria tabela para receber o resultado da verificacao
+tab_raster <- data.frame(row.names=NULL)
+
+# Loop de conferencia
+for ( sp in especies) {
+  
+  raster_sp <- sp %in% rasters
+  tab_raster_sp <- data.frame (sp, raster_sp)
+  tab_raster <- rbind(tab_raster,tab_raster_sp)
+  cat (sp,raster_sp,"\n")
+}
+
+# Renomeia as colunas
+names(tab_raster) <- c("taxon","raster")
+
+# Especies sem raster
+tab_sem_raster <- subset.data.frame(tab_raster,raster==FALSE)
+````
+===
