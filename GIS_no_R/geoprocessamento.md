@@ -336,7 +336,7 @@ rm(join)
 
 ### >>> Rasterizar polígonos (Tipo Spatial Join) <<<
 
-#### Ao usar a função `rasterize` dirtamente em um polígono, caso ele seja muito menor que a célula, pode ocorrer de ser gerado um raster vazio. Um forma de contornar este problema é "converter" o polígono para polígonos de tamanho equivalente ao da célula. Algo semelhante ao um "spatial join" ou "select by location".
+#### Ao usar a função `rasterize` dirtamente em um polígono, caso ele ocupe menos de 50% da célula, será gerado um raster vazio. Um forma de contornar este problema é "converter" o polígono para polígonos de tamanho equivalente ao da célula. Algo semelhante ao um "spatial join" ou "select by location".
 ````{r}
 library(rgeos)
 library(rgdal)
@@ -455,7 +455,38 @@ sfStop()
 # Desligar o PC
 system('shutdown -s')
 ````
+===
+### >>> Rasterizar Polígonos pelo número(posição da célula) <<<
 
+####  Ao usar a função `rasterize` dirtamente em um polígono, caso ele ocupe menos de 50% da célula, será gerado um raster vazio. Um forma de contornar este problema é "converter" o polígono para polígonos de tamanho equivalente ao da célula. Algo semelhante ao um "spatial join" ou "select by location". Porém, este método pode se apresentar extremamente lento. Uma outra saída é extrair do raster o número(posição da célula) que tem sobreposição com o polígono, gerar os centróides destas células e em seguida cortar(`mask`) pelos centróides gerados. Desta forma todas as células que tiverem mais de 1% da sua área sobreposata pelo polígono será extraída.
+
+````{r}
+ # Carrega o shapefile da nova proposta de uc
+ nova_proposta <- readShapePoly("nova_proposta.shp", proj4string=CRS("+proj=longlat +datum=WGS84"))
+ 
+ # Lista de arquivos raster
+ atv_anto_files <- list.files(path = "./atv_antropicas", pattern = "\\.tif$",full.names = T)
+ remanescente_file <- list.files(path = "./remanescente",pattern = "\\.tif$",full.names = T)
+ var_clim_file <- list.files(path = "./variacao_climatica",pattern = "\\.tif$",full.names = T)
+ 
+ # Agrupa os raster em um unico objeto
+ rasters <- stack(x=c(atv_anto_files,remanescente_file,var_clim_file))
+ 
+ # Identifica quais celulas (numero de posicao) tem mais de 1% de sua area sobreposta pelo poligono.
+ # O argumento "weights" deve estar como TRUE, caso contraio sera identificadas apenas celulas com mais de
+ # 50% de sobreposicao.
+ n_cel <- cellFromPolygon(rasters, nova_proposta, weights=T)
+ n_cel <- as.data.frame(n_cel)
+ n_cel <- n_cel$cell
+
+ # Transforma o numero de posicao da celula em um shapefile de pontos
+ pto_r <- xyFromCell(rasters_nova, n_cel, spatial=T)
+ 
+ # Corta o raster pelo shapefile de pontos
+ rasters_nova <- mask(rasters, mask = pto_r)
+
+````
+===
 ### >>> Reparando geometria usando `repeat` e `break` <<<
 
 #### Alguns problemas de geometria podem ser corrigidos fazendo um buffer de largura 0. Assim será criado um shapefile com limite igual ao original, mas com a geometria correta.
