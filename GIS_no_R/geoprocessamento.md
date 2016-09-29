@@ -527,7 +527,7 @@ library (rgeos)
  ````
 ===
 
-### >>> Loop com Reapet e Break <<<
+### >>> Loop com Repeat e Break <<<
 
 #### Não é necessário corrigir geometria com `repeat`, é apenas um exemplo de como `repeat`e `break`podem ser usados em um loop.
 ````{r}
