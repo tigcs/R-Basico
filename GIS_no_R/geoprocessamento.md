@@ -487,15 +487,50 @@ system('shutdown -s')
 
 ````
 ===
-### >>> Reparando geometria usando `repeat` e `break` <<<
+### >>> Reparando geometria <<<
 
-#### Alguns problemas de geometria podem ser corrigidos fazendo um buffer de largura 0. Assim será criado um shapefile com limite igual ao original, mas com a geometria correta.
+#### Alguns problemas de geometria podem ser corrigidos fazendo um buffer de largura 0. Assim será criado um shapefile com limite igual ao original, mas com a geometria correta. 
 ````{r}
-
 library(raster)
 library(maptools)
 library (rgeos)
 
+# Carrega o shapefile das areas prioritarias MMA 2007 para criacao e ampliacao ed Uc
+ priori_MMA <- readShapePoly("./area_prioritaria_MMA/area_prioritarias_2007.shp", proj4string=CRS("+proj=longlat +datum=WGS84"))
+ 
+ # Checa se a geometria do shapefile tem algum problema # Havendo problema corrige.
+   if (gIsValid(limite_shp_borda) == FALSE){
+       limite_shp_borda <-gBuffer(limite_shp_borda, byid=TRUE,width=0.0)}
+ # Confere se a geometria foi realmente corrigida.  
+   if (gIsValid(limite_shp_borda) == TRUE) { print("geometria corrigida")}
+````
+#### Entretanto, este atrifício falha se houver polígonos com buracos, pois estes serão eliminados. Uma forma mais eficaz é usar a função `gSimplify`. Porém, esta função elimina a tabela de atributos, mas que pode ser inserida novamente se salva antes como um `data frame` em um objeto separado.
+````{r}
+library(raster)
+library(maptools)
+library (rgeos)
+
+# Carrega o shapefile das areas prioritarias MMA 2007 para criacao e ampliacao ed Uc
+ priori_MMA <- readShapePoly("./area_prioritaria_MMA/area_prioritarias_2007.shp", proj4string=CRS("+proj=longlat +datum=WGS84"))
+
+ # Checa se a geometria do shapefile tem algum problema, havendo problema corrige.
+ if (gIsValid(priori_MMA) == FALSE){
+   tab_atributos <- priori_MMA@data
+   priori_MMA <- gSimplify(priori_MMA, tol=0, topologyPreserve=F)}
+ 
+ # Devolve a tabela de atributos ao Spatial Polygon
+   priori_MMA <- SpatialPolygonsDataFrame(priori_MMA,data=tab_atributos)
+   rm(tab_atributos)
+ 
+ # confere se realmente a geometria foi corrigida
+ if (gIsValid(priori_MMA) == TRUE) {print("geometria corrigida")}
+ ````
+===
+
+### >>> Loop com Reapet e Break <<<
+
+#### Não é necessário corrigir geometria com `repeat`, é apenas um exemplo de como `repeat`e `break`podem ser usados em um loop.
+````{r}
 # Ler o shapefile do limite da borda da America do Sul
 limite_shp_borda  <- readShapePoly ("0_limites/am_sul_borda.shp",proj4string=CRS("+proj=longlat +datum=WGS84"))
 
