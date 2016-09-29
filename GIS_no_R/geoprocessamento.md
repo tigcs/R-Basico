@@ -513,17 +513,16 @@ library (rgeos)
 # Carrega o shapefile das areas prioritarias MMA 2007 para criacao e ampliacao ed Uc
  priori_MMA <- readShapePoly("./area_prioritaria_MMA/area_prioritarias_2007.shp", proj4string=CRS("+proj=longlat +datum=WGS84"))
 
- # Checa se a geometria do shapefile tem algum problema, havendo problema corrige.
+ # Checa se a geometria do shapefile tem algum problema # Havendo problema corrige.
  if (gIsValid(priori_MMA) == FALSE){
    tab_atributos <- priori_MMA@data
-   priori_MMA <- gSimplify(priori_MMA, tol=0, topologyPreserve=F)}
- 
- # Devolve a tabela de atributos ao Spatial Polygon
+   priori_MMA <- gSimplify(priori_MMA, tol=0, topologyPreserve=F)
+  # Devolve a tabela de atributos transformando o Spatial Polygon em Spatial Polygon Data Frame
    priori_MMA <- SpatialPolygonsDataFrame(priori_MMA,data=tab_atributos)
-   rm(tab_atributos)
+   rm(tab_atributos)}
  
  # confere se realmente a geometria foi corrigida
- if (gIsValid(priori_MMA) == TRUE) {print("geometria corrigida")}
+ if (gIsValid(priori_MMA) == TRUE) {print("Geometria OK")}
  ````
 ===
 
@@ -671,8 +670,6 @@ if (gIntersects(sp_shp,ucs) == FALSE) {
  cat ("#######################################################################", "\n")  
 
 } # Fecha o for loop
-
-
 
 # Troca o nome da coluna
 names(sp_sem_inter) <- "taxon"
