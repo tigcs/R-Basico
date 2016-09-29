@@ -329,4 +329,61 @@ nome_sp <- gsub(nome_sp,pattern = "-", replacement = "_" )
 nome_sp <- gsub(nome_sp,pattern = '[(]', replacement = "" )
 nome_sp <- gsub(nome_sp,pattern = ")", replacement = "" )
 ````
+===
 
+### >>> Média e desvio padrão por colunas <<<
+
+#### Retirado de : http://stackoverflow.com/questions/20794284/means-and-sd-for-columns-in-a-dataframe-with-na-values#
+#### Explicação do funcionamento de apply,sapply, tapply:
+http://www.dadosaleatorios.com.br/2014/01/apply-lapply-sapply-tapply-mapply-como.html
+http://tech.queryhome.com/76799/r-difference-between-apply-vs-sapply-vs-lapply-vs-tapply
+
+````[r}
+sapply(df, function(cl) list(means=mean(cl,na.rm=TRUE), sds=sd(cl,na.rm=TRUE)))
+      col1     col2     col3     col4     col5    
+means 3        8        12.5     18.25    22.5    
+sds   1.581139 1.581139 1.290994 1.707825 1.290994
+
+as.data.frame( t(sapply(df, function(cl) list(means=mean(cl,na.rm=TRUE), 
+                                              sds=sd(cl,na.rm=TRUE))) ))
+     means      sds
+col1     3 1.581139
+col2     8 1.581139
+col3  12.5 1.290994
+col4 18.25 1.707825
+col5  22.5 1.290994
+````
+===
+### >>> Arrendondar números de uma tabela <<<
+````{r}
+is.num <- sapply(DF, is.numeric)
+DF[is.num] <- lapply(DF[is.num], round, 8)
+````
+===
+### >>> Transformar tipo de coluna <<<
+
+````{r}
+> d
+  char fake_char fac char_fac num
+1    a         1   1        a   1
+2    b         2   2        b   2
+3    c         3   3        c   3
+4    d         4   4        d   4
+5    e         5   5        e   5
+
+> transform(d, fake_char = as.numeric(fake_char), 
+               char_fac = as.numeric(char_fac))
+
+  char fake_char fac char_fac num
+1    a         1   1        1   1
+2    b         2   2        2   2
+3    c         3   3        3   3
+4    d         4   4        4   4
+5    e         5   5        5   5
+````
+===
+### >>> Ordenar Tabela por uma coluna <<<
+````{r}
+ # Ordena a tabela por ordem alfabetica pela coluna variaveis
+ var_biomas <- var_biomas[order(var_biomas$variaveis),]
+ ````
