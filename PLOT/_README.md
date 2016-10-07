@@ -6,3 +6,13 @@
 http://shinyapps.org/apps/RGraphCompendium/index.php#correlations
 
 ===
+
+### >>> Sites para escolha de cores <<<
+
+#### Códigos RGB e outros.
+
+http://colorschemedesigner.com/csd-3.5/
+
+http://www.color-hex.com/color/633000
+
+===
