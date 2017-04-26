@@ -703,13 +703,19 @@ occ$qtdade_pto <- qtdade_pto
 # Retira da lista de espécies a espécie já baixada
 especies <- especies[-1]
 
+# Cria data frame para registro de espécies sem registro no GBIF
+especies_s_PTO <- data.frame("SP"=character(0))
+
 
 for( sp in especies){
   
   cat( "Buscando regsitros de: ", sp, "\n")
   
-  # Busca e baixa registro de ocorrência que tem coordenadas e sem problemas geoespaciais
+  ## Busca e baixa registro de ocorrência que tem coordenadas e sem problemas geoespaciais
   occ1 <- gbif(sp, download=T, geo = T, args=c("hasGeospatialIssue=FALSE", "hasCoordinate=TRUE"))
+  
+  ## Armazena registros encontrados
+  if (is.null(occ1)==FALSE){
   
   # Separa apenas as colunas de nome da espécies e coordenadas
   occ1 <- occ1[,c("species", "lon", "lat")]
@@ -721,7 +727,10 @@ for( sp in especies){
   occ1$qtdade_pto <- qtdade_pto
   
   # Junta as tabelas de todas as espécies em uma única tabela de registro de ocorrência
-  occ <- rbind(occ,occ1)
+  occ <- rbind(occ,occ1)}
+  
+  ## Registra espécies sem registro
+  if (is.null(occ1)==TRUE){especies_s_PTO <- rbind(especies_s_PTO, data.frame("SP"=sp))}
  
 }
 
