@@ -679,6 +679,54 @@ write.table(x= sp_sem_inter, file = "./7_R_inter/_SP_SEM_INTER.txt",quote = FALS
 
 # Desliga o PC
 system('shutdown -s')
+````
+===
+### >>> Baixa registros de ocorrência de espécies armazenados no GBIF <<<
+````{r}
+library(dismo)
+
+# Carrega lista de espécies
+especies <- read.table(file = , header = T, sep="\t")
+
+# Busca e baixa registro de ocorrência que tem coordenadas e sem problemas geoespaciais (args)
+occ <- gbif(especies[1], download=T, geo = T, args=c("hasGeospatialIssue=FALSE", "hasCoordinate=TRUE"))
+
+# Separa apenas as colunas de nome da espécies e coordenadas
+occ <- occ[,c("species", "lon", "lat")]
+
+# Conta quantos registros há
+qtdade_pto <- length(occ$species)
+
+# Insere na Tabela da espécie a coluna de quantidade de pontos
+occ$qtdade_pto <- qtdade_pto
+
+# Retira da lista de espécies a espécie já baixada
+especies <- especies[-1]
+
+
+for( sp in especies){
+  
+  cat( "Buscando regsitros de: ", sp, "\n")
+  
+  # Busca e baixa registro de ocorrência que tem coordenadas e sem problemas geoespaciais
+  occ1 <- gbif(sp, download=T, geo = T, args=c("hasGeospatialIssue=FALSE", "hasCoordinate=TRUE"))
+  
+  # Separa apenas as colunas de nome da espécies e coordenadas
+  occ1 <- occ1[,c("species", "lon", "lat")]
+  
+  # Conta quantos registros há
+  qtdade_pto <- length(occ1$species)
+  
+  # Insere na Tabela da espécie a coluna de quantidade de pontos
+  occ1$qtdade_pto <- qtdade_pto
+  
+  # Junta as tabelas de todas as espécies em uma única tabela de registro de ocorrência
+  occ <- rbind(occ,occ1)
+ 
+}
+
+# Salva a tabela com todas as espécies
+write.table(x=occ, file = , quote = F,sep = "\t",row.names = F)
+
 ===
 ````
-
