@@ -740,7 +740,7 @@ write.table(x=occ, file = , quote = F,sep = "\t",row.names = F)
 ````
 ===
 ### >>> Transformação de CRS e cálculo de Área <<<
-#### Mais informações em: https://github.com/tigcs/R-Basico/blob/master/GIS_no_R/OverviewCoordinateReferenceSystems.pdf
+#### Mais informações em: https://github.com/tigcs/R-Basico/blob/master/GIS_no_R/OverviewCoordinateReferenceSystems.pdf retirado de: https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf
 ````{r}
 
 # CRS WGS85
