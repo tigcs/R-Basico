@@ -740,6 +740,7 @@ write.table(x=occ, file = , quote = F,sep = "\t",row.names = F)
 ````
 ===
 ### >>> Transformação de CRS e cálculo de Área <<<
+#### Mais informações em: https://github.com/tigcs/R-Basico/blob/master/GIS_no_R/OverviewCoordinateReferenceSystems.pdf
 ````{r}
 
 # CRS WGS85
@@ -756,6 +757,7 @@ t$Area_m2 <- area(t)
 
 # Outra forma de calcular a área
 t$Area_m21 <- gArea(t, byid=T)
+
 
 ````
 ===
