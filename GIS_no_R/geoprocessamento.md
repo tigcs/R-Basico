@@ -737,5 +737,25 @@ for( sp in especies){
 # Salva a tabela com todas as espécies
 write.table(x=occ, file = , quote = F,sep = "\t",row.names = F)
 
-===
 ````
+===
+### >>> Transformação de CRS e cálculo de Área <<<
+````{r}
+
+# CRS WGS85
+CRS("+init=epsg:4326")
+
+# Cria o CRS South America Albers Equal Area. A tag "+towgs84" fornece os parâmetros de transformação(x,y,z).
+albers <- CRS("+proj=aea +lat_1=-5 +lat_2=-42 +lat_0=-32 +lon_0=-60 +x_0=0 +y_0=0 +ellps=aust_SA +units=m +towgs84=-66.87,4.37,-38.52 +no_defs")
+
+# Projeta o shapefile para CRS South America Albers Equal Area
+t <- spTransform (grid_bl5, CRSobj = albers)
+
+# Cálculo de área
+t$Area_m2 <- area(t)
+
+# Outra forma de calcular a área
+t$Area_m21 <- gArea(t, byid=T)
+
+````
+===
