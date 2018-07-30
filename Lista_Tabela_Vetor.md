@@ -387,3 +387,9 @@ DF[is.num] <- lapply(DF[is.num], round, 8)
  # Ordena a tabela por ordem alfabetica pela coluna variaveis
  var_biomas <- var_biomas[order(var_biomas$variaveis),]
  ````
+ ===
+### >>> Trasnforma a tabela de fator ou caractere em numérica usando sapply <<<
+````{r}
+#
+tab_p <- as.data.frame(sapply(tab_p, FUN=as.numeric))
+````
