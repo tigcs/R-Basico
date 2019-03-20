@@ -63,8 +63,25 @@ system('shutdown -s')
 
 ===
 
-### >>>
+### >>> Instalar pacotes R diretamente da fonte (instalar versões antigas)
 
+https://support.rstudio.com/hc/en-us/articles/219949047-Installing-older-versions-of-packages
+
+#### Buscar a URL da versão do pacote desejada em: https://cran.r-project.org/src/contrib/Archive/
+
+#### Os exemplos abaixo são para o pacote ggplot2.
+
+#### Dentro do R usar os seguintes comandos:
+```{r}
+packageurl <- "http://cran.r-project.org/src/contrib/Archive/ggplot2/ggplot2_0.9.1.tar.gz"
+install.packages(packageurl, repos=NULL, type="source")
+````
+#### LINUX: No Terminal, usar os seguintes comandos:
+```{r}
+wget http://cran.r-project.org/src/contrib/Archive/ggplot2/ggplot2_0.9.1.tar.gz
+sudo R CMD INSTALL ggplot2_0.9.1.tar.gz
+````
+===
 
 
 
