@@ -2,23 +2,37 @@
 
 ````{r}
 
+# Diretorio com as tabelas a jusante
+setwd("~/Documentos/PRIM_Mineracao/mata_atlantica/tabelas_jusante")
+
 # Lista todos os aqruivos .csv da pasta chamda csv
-tabelas_csv<- list.files(path="./csv",pattern ="\\.csv")
+tabelas_csv<- list.files(path=getwd(),pattern ="\\.csv", full.names = T)
 
-# Eliminar um arquivo indesejado
-tabelas_csv<- tabelas_csv[-c(1,2,3)]
+# Cria a tabela final vazia
+tab_final <- data.frame("montante"= numeric(0), "jusante"= numeric(0))
 
-#Ler a primeira tabela da lista
-sp1<- read.csv(file=paste0("./csv/",tabelas_csv[1]))
+#teste
+#tab = tabelas_csv[1]
 
-# Foreach Loop com rbind adicionando uma tabela por vez ao sp1.
-foreach(i=tabelas_csv[-1]) %do% {
-  spi<- read.csv(file=paste0("./csv/",i))
-  sp1<- rbind(sp1,spi)
+# Progresso
+p =1
+
+# Une as tabelas a jusante
+for (tab in tabelas_csv) {
+  
+  # Carrega uma tabela
+  tabela <- read.csv(tab, header = T)
+  
+  # Altera o nome das colunas
+  names(tabela) <-c("montante", "jusante")
+  
+  # Junta as tabelas
+  tab_final <- rbind(tab_final, tabela)
+  
+  # Progresso
+  cat (basename(tab), p,"de", length(tabelas_csv), "\n")
+  p= p+1
 }
-
-# Escreve a tabela final
-write.csv(sp1,file="./csv/_sp_TODAS.csv")
 ````
 
 #### Detalhes do uso do `foreach` em http://cran.r-project.org/web/packages/foreach/vignettes/foreach.pdf
