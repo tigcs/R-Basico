@@ -34,6 +34,7 @@ for (tab in tabelas_csv) {
   p= p+1
 }
 ````
+https://www.datanovia.com/en/lessons/identify-and-remove-duplicate-data-in-r/
 
 #### Detalhes do uso do `foreach` em http://cran.r-project.org/web/packages/foreach/vignettes/foreach.pdf
 
