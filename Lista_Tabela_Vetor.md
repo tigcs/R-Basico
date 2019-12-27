@@ -408,3 +408,19 @@ DF[is.num] <- lapply(DF[is.num], round, 8)
 #
 tab_p <- as.data.frame(sapply(tab_p, FUN=as.numeric))
 ````
+===
+### >>> Normalizar valores em uma tabela para variarem de 0 a 1 <<<
+
+````{r}
+# Cria a função normalizar
+normalizar <- function(x) (x- min(x))/(max(x) - min(x))
+
+# Aplica a função à tabela dados
+dados_z <- as.data.frame(sapply(dados,normalizar))
+
+# Confirma se as colunas têm como máximo 1 e mínimo 0
+apply(dados_z, 2, max)
+apply(dados_z, 2, min)
+````
+===
+
