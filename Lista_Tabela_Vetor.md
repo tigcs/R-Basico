@@ -419,8 +419,8 @@ normalizar <- function(x) (x- min(x))/(max(x) - min(x))
 dados_z <- as.data.frame(sapply(dados,normalizar))
 
 # Confirma se as colunas têm como máximo 1 e mínimo 0
-apply(dados_z, 2, max)
-apply(dados_z, 2, min)
+apply(dados_z, 2, max) # 2 significa que a função será aplicada às colunas, 1 aplicaria as linhas
+apply(dados_z, 2, min) # 2 significa que a função será aplicada às colunas, 1 aplicaria as linhas
 ````
 ===
 
