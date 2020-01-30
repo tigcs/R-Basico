@@ -218,6 +218,12 @@ head(a1@data)
 
 ### >>> Merge de shapefile de especies <<<
 
+#### A função `bind` do pacote `raster` foi a melhor opção que encontrei até o momento, pois consegue juntar shapefiles mesmo não tendo as mesmas colunas na tabela de atributos.
+
+````{r}
+merge <- bind(mpc,uf)
+````
+
 #### Merge só funciona se os shapefiles tiverem as mesmas colunas, para isso pode se deletar ou criar colunas para que haja correspondência.
 
 ````{r}
