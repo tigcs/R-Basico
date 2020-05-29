@@ -423,4 +423,9 @@ apply(dados_z, 2, max) # 2 significa que a função será aplicada às colunas, 
 apply(dados_z, 2, min) # 2 significa que a função será aplicada às colunas, 1 aplicaria as linhas
 ````
 ===
+### >>> Susbtituir NA em um dataframe por 0 <<<
 
+````{r}
+tab[is.na.data.frame(tab)] <- 0 # tab é o data frame com NA
+````
+===
