@@ -21,6 +21,20 @@
 ````{r}
 # Comando para listar APENAS os arquivos que contenham ".tif"
     files <- list.files(pattern = "\\.tif$")
+````    
+===
+### >>> Substituição em strings <<<
+````{r}
+cave <- basename(r)
+"FFeia_AI1000m.tif"
+
+# Remove todos o ".tif" que estiverem ao final da string
+cave <- gsub(pattern = "\\.tif$", replacement = "", cave)
+"FFeia_AI1000m"
+
+# Remove ttudo que estiver depois de "_AI", inclusive.
+cave <- gsub(pattern = "_AI.*", replacement = "", cave)
+"FFeia"
 ````
 
 ===
