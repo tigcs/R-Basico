@@ -28,7 +28,7 @@
 cave <- basename(r)
 "FFeia_AI1000m.tif"
 
-# Remove todos o ".tif" que estiverem ao final da string
+# Remove o ".tif" que estiverem ao final da string
 cave <- gsub(pattern = "\\.tif$", replacement = "", cave)
 "FFeia_AI1000m"
 
