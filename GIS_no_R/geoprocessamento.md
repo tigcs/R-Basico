@@ -13,10 +13,17 @@ https://cran.r-project.org/web/packages/raster/raster.pdf
 
 ````{r}
 # Ler shapefile
-biomas<- shapefile ("./biomas/editado/BIOMAS.shp")
+biomas <- shapefile ("./biomas/editado/BIOMAS.shp")
 
 # Escreve shapefile
 shapefile(x=intersection, filename="./teste_clip.shp")
+````
+#### Pacote `rgdal`
+
+````{r}
+# Ler shapefile
+shp <- readOGR(dsn="./pasta1/pasta2", layer="nome_do_shp")
+# dsn é o DIRETÓRIO onde está o shapefile e layer é o nome do arquivo sem a extensão.
 ````
 
 #### Pacote `dismo`
