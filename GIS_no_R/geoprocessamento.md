@@ -774,3 +774,9 @@ t$Area_m21 <- gArea(t, byid=T)
 
 ````
 ===
+
+### >>> "Clip" Cortar polígono por outro polígono <<<
+#### Como cortar um polígono por outro que não seja apenas pela extensão retangular (boundying box) do segundo.
+#### https://stackoverflow.com/questions/32233576/how-to-clip-a-polygon-shapefile-by-another-polygon-shapefile-in-r/66565254#66565254
+
+===
