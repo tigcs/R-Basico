@@ -429,7 +429,6 @@ apply(dados_z, 2, min) # 2 significa que a função será aplicada às colunas, 
 tab[is.na.data.frame(tab)] <- 0 # tab é o data frame com NA
 ````
 ===
-===
 ### >>> Operações com data/tempo <<<
 
 ````{r}
