@@ -429,3 +429,14 @@ apply(dados_z, 2, min) # 2 significa que a função será aplicada às colunas, 
 tab[is.na.data.frame(tab)] <- 0 # tab é o data frame com NA
 ````
 ===
+===
+### >>> Operações com data/tempo <<<
+
+````{r}
+#library(anytime)
+t1 <- anytime(date())
+tab_freq <- as.data.frame(freq(r1985))
+t2 <- anytime(date())
+t2 - t1 #tempo gasto para executar freq
+````
+===
