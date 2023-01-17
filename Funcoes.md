@@ -83,6 +83,15 @@ sudo R CMD INSTALL ggplot2_0.9.1.tar.gz
 ````
 ===
 
+### >>> Instalar pacotes R diretamente da fonte (instalar versões antigas)
+
+Função que invoca um comando de terminal do sistema operacional, ou seja, roda comandos do terminal via Rstudio.
+
+```{r}
+# Abre o navegador Firefox
+system2("firefox") # É equivalente a dar o comando 'firefox' no terminal Linux.
+```
+
 
 
 
