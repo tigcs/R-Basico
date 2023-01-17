@@ -67,7 +67,8 @@ for (a in arquivos) {
 ````
 
 ===
+### >>> Liberar memória RAM utilizada pelo R <<<
 
-
+Ao lidar com grandes arquivos em scripts com laços (loops), pode-se consumir toda a memória RAM disponível causando uma interrupção inesperada do R, que exige iniciar nova sessão, e consequentemte, perde-se todo o processamento. Para evitar que isso ocorra, pode-se inserir no laço a função **gc( )** "Garbage Collection", que libera a memória ocupada que não está sendo mais utilizada.
 
 
